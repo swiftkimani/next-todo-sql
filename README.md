@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ✨ TaskFlow
+
+A modern, elegant task management app built with Next.js 16 and PostgreSQL via Prisma.
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![React](https://img.shields.io/badge/React-19-blue?logo=react)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791?logo=postgresql)
+![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma)
+
+## Features
+
+- **User Authentication** – Register and sign in to sync your tasks across devices
+- **Guest Mode** – Try the app without creating an account (tasks saved locally)
+- **Persistent Storage** – PostgreSQL database for registered users via Prisma ORM
+- **Task Filtering** – View all tasks, active tasks, or completed tasks
+- **Glassmorphism UI** – Beautiful, modern design with smooth animations
+
+## Tech Stack
+
+| Layer     | Technology                      |
+| --------- | ------------------------------- |
+| Framework | Next.js 16 (App Router)         |
+| Frontend  | React 19                        |
+| Database  | PostgreSQL                      |
+| ORM       | Prisma 6                        |
+| Styling   | Custom CSS with Tailwind        |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+
+- PostgreSQL database (local or hosted)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <your-repo-url>
+   cd next-todo-sql
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**
+   
+   Create a `.env` file in the root directory:
+   ```env
+   DATABASE_URL="postgresql://username:password@host:5432/database"
+   ```
+
+4. **Push database schema**
+   ```bash
+   npx prisma db push
+   ```
+
+5. **Run the development server**
+   ```bash
+   npm run dev
+   ```
+
+6. **Open** [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Project Structure
+
+```
+src/
+├── app/              # Next.js App Router pages and API actions
+├── components/       # React components
+│   ├── TodoApp.js    # Main todo application
+│   ├── TodoItem.js   # Individual todo item
+│   ├── LoginForm.js  # User login
+│   ├── RegisterForm.js # User registration
+│   └── GuestBanner.js  # Guest mode notification
+├── context/          # React context (Auth)
+└── lib/              # Utility libraries
+prisma/
+└── schema.prisma     # Database schema
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+| Command          | Description              |
+| ---------------- | ------------------------ |
+| `npm run dev`    | Start development server |
+| `npm run build`  | Build for production     |
+| `npm run start`  | Start production server  |
+| `npm run lint`   | Run ESLint               |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Database Schema
 
-## Learn More
+```prisma
+model Todo {
+  id        Int      @id @default(autoincrement())
+  title     String
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+```
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
