@@ -9,12 +9,24 @@ import {
 } from "@/app/actions";
 import TodoItem from "./TodoItem";
 import GuestBanner from "./GuestBanner";
+import TypeformWidget from "./TypeformWidget";
 
 export default function TodoApp({ onLogout }) {
   const { user } = useAuth();
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState("");
   const [filter, setFilter] = useState("all");
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [submissionSuccess, setSubmissionSuccess] = useState(null);
+
+  const handleTypeformSubmit = () => {
+    setShowFeedback(false);
+    setSubmissionSuccess({
+      email: user.email,
+      id: user.id,
+      timestamp: new Date().toLocaleTimeString()
+    });
+  };
   const [loading, setLoading] = useState(true);
 
   // Load todos on mount
@@ -177,7 +189,46 @@ export default function TodoApp({ onLogout }) {
             ))}
           </div>
         )}
+        {user && !showFeedback && (
+          <div className="mt-8 flex flex-col items-center gap-4 animate-fade-in">
+            {submissionSuccess && (
+              <div className="p-4 glass-card border-green-500/30 bg-green-500/10 text-center max-w-md">
+                <h3 className="text-lg font-semibold text-green-400 mb-1">Thank you!</h3>
+                <p className="text-gray-300">Feedback received from <span className="text-white font-medium">{submissionSuccess.email}</span></p>
+                <p className="text-xs text-green-300/50 mt-2">Submission ID: {submissionSuccess.id} • {submissionSuccess.timestamp}</p>
+              </div>
+            )}
+            <button 
+              className="btn btn-secondary"
+              onClick={() => setShowFeedback(true)}
+            >
+              {submissionSuccess ? "Give Feedback Again" : "Give Feedback"}
+            </button>
+          </div>
+        )}
       </main>
+      {user && showFeedback && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in" onClick={() => setShowFeedback(false)}>
+          <div 
+            className="w-full max-w-2xl h-[600px] bg-[#1e293b] rounded-2xl shadow-2xl relative overflow-hidden border border-white/10" 
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/20 hover:bg-black/40 text-white/70 hover:text-white transition-colors"
+              onClick={() => setShowFeedback(false)}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+            <TypeformWidget 
+              user={user} 
+              onSubmit={handleTypeformSubmit}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
