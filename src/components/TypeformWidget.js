@@ -3,6 +3,11 @@ import { useEffect } from "react";
 
 export default function TypeformWidget({ user, onSubmit }) {
   useEffect(() => {
+    // Force Typeform to scan for new widgets
+    if (window.tf) {
+      window.tf.load();
+    }
+
     // Handle form submission message
     const handleMessage = (event) => {
       // Check for form-submit event from Typeform
